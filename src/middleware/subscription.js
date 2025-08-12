@@ -18,7 +18,13 @@ const requirePremium = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    // Preserve the original error status code if it exists
+    if (error.statusCode) {
+      next(error);
+    } else {
+      // If it's a database error or other internal error, return 500
+      next(createError(500, 'Internal server error'));
+    }
   }
 };
 
@@ -39,7 +45,13 @@ const requireMatchmakingAccess = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    // Preserve the original error status code if it exists
+    if (error.statusCode) {
+      next(error);
+    } else {
+      // If it's a database error or other internal error, return 500
+      next(createError(500, 'Internal server error'));
+    }
   }
 };
 
@@ -58,7 +70,13 @@ const attachSubscriptionStatus = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    next(error);
+    // Preserve the original error status code if it exists
+    if (error.statusCode) {
+      next(error);
+    } else {
+      // If it's a database error or other internal error, return 500
+      next(createError(500, 'Internal server error'));
+    }
   }
 };
 

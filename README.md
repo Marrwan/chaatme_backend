@@ -1,6 +1,6 @@
-# Choice Talent Backend API
+# ChaatMe Backend API
 
-A secure, scalable backend API built with Express.js, Sequelize, and PostgreSQL for the Choice Talent application.
+A secure, scalable backend API built with Express.js, Sequelize, and PostgreSQL for the ChaatMe dating application.
 
 ## Features
 
@@ -11,6 +11,8 @@ A secure, scalable backend API built with Express.js, Sequelize, and PostgreSQL 
 - 🧪 **Testing**: Comprehensive test suite with Jest
 - 📚 **Documentation**: Well-documented API endpoints
 - 🚀 **Production Ready**: Environment-based configuration
+- 💬 **Real-time Messaging**: WebSocket-based chat system
+- 📞 **Audio/Video Calling**: WebRTC integration for calls
 
 ## Tech Stack
 
@@ -22,6 +24,8 @@ A secure, scalable backend API built with Express.js, Sequelize, and PostgreSQL 
 - **Validation**: Joi
 - **Testing**: Jest + Supertest
 - **Email**: Nodemailer
+- **Real-time**: Socket.IO
+- **Calls**: WebRTC
 
 ## Quick Start
 
@@ -41,17 +45,17 @@ A secure, scalable backend API built with Express.js, Sequelize, and PostgreSQL 
 
 2. **Environment Setup**
    ```bash
-   cp .env.example .env
+   cp env.example .env
    # Edit .env with your configuration
    ```
 
 3. **Database Setup**
    ```bash
    # Create databases
-   createdb choice_talent_dev
-   createdb choice_talent_test
+   createdb chaatme_dev
+   createdb chaatme_test
 
-   # Run migrations (optional - auto-sync in development)
+   # Run migrations
    npm run db:migrate
    ```
 
@@ -90,44 +94,29 @@ A secure, scalable backend API built with Express.js, Sequelize, and PostgreSQL 
 | `POST` | `/api/auth/reset-password` | Reset password with token | No |
 | `GET` | `/api/auth/profile` | Get current user profile | Yes |
 
-### User Management
+### Messaging
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/api/user/profile` | Get user profile | Yes |
-| `PUT` | `/api/user/profile` | Update user profile | Yes |
-| `POST` | `/api/user/change-password` | Change password | Yes |
-| `DELETE` | `/api/user/account` | Delete account | Yes |
-| `GET` | `/api/user/dashboard` | Get dashboard data | Yes |
+| `GET` | `/api/chat/conversations` | Get user conversations | Yes |
+| `POST` | `/api/chat/conversations` | Create new conversation | Yes |
+| `GET` | `/api/chat/conversations/:id/messages` | Get conversation messages | Yes |
+| `POST` | `/api/chat/conversations/:id/messages` | Send message | Yes |
 
-### Example Requests
+### Calling
 
-#### Register User
-```bash
-curl -X POST http://localhost:3001/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "Password123!",
-    "name": "John Doe"
-  }'
-```
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/api/calls/initiate` | Start a call | Yes |
+| `POST` | `/api/calls/:id/answer` | Answer a call | Yes |
+| `POST` | `/api/calls/:id/reject` | Reject a call | Yes |
+| `POST` | `/api/calls/:id/end` | End a call | Yes |
 
-#### Login
-```bash
-curl -X POST http://localhost:3001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "Password123!"
-  }'
-```
+### Health Check
 
-#### Authenticated Request
-```bash
-curl -X GET http://localhost:3001/api/user/profile \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | Health check endpoint |
 
 ## Testing
 
@@ -165,7 +154,7 @@ backend/
 │   ├── services/        # Business logic services
 │   ├── utils/           # Utility functions
 │   └── server.js        # App entry point
-├── tests/               # Test files
+├── docs/                # Documentation
 ├── .env.example         # Environment variables template
 ├── package.json
 └── README.md
@@ -183,24 +172,29 @@ backend/
 
 ## Production Deployment
 
-1. **Environment Setup**
-   - Set production environment variables
-   - Configure PostgreSQL database
-   - Set up email service (SMTP)
+### Render Deployment
 
-2. **Database Migration**
-   ```bash
-   NODE_ENV=production npm run db:migrate
-   ```
+This project is configured for deployment on Render:
 
-3. **Start Application**
-   ```bash
-   npm start
-   ```
+1. **Connect Repository**: Link your GitHub repository to Render
+2. **Environment Setup**: Set production environment variables in Render dashboard
+3. **Database**: Render will automatically provision a PostgreSQL database
+4. **Deploy**: Render will automatically deploy on push to main branch
+
+### Environment Variables for Production
+
+Set these in your Render dashboard:
+
+- `NODE_ENV=production`
+- `DATABASE_URL` (auto-provided by Render)
+- `JWT_SECRET` (generate a secure random string)
+- `JWT_EXPIRES_IN=7d`
+- `FRONTEND_URL=https://chaatme-frontend.netlify.app`
+- `EMAIL_HOST`, `EMAIL_USER`, `EMAIL_PASS` (for email functionality)
 
 ## Contributing
 
-1. Follow the coding standards in `/rules/implementation.mdc`
+1. Follow the coding standards
 2. Write tests for new features
 3. Update documentation
 4. Ensure all tests pass before committing

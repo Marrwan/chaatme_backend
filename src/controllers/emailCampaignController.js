@@ -300,81 +300,7 @@ const calculateCampaignStats = async (req, res) => {
   }
 };
 
-/**
- * Create default career profile campaign
- */
-const createDefaultCareerProfileCampaign = async (req, res) => {
-  try {
-    const campaignData = {
-      name: 'Career Profile Completion Campaign',
-      subject: 'Complete Your Career Profile',
-      template: `
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Career Profile Online</h1>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h2 style="color: #333; margin-top: 0;">Profile Update</h2>
-            <p style="color: #666; line-height: 1.6;">Hi {{email}},</p>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-              Hiring managers and employers can't see the important details they are looking for on your career profile, 
-              and as such they are unable to make hiring decisions.
-            </p>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-              To improve your chances for juicy employment offers, ensure to update your profile from time to time.
-            </p>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-              Thousands of people keep getting new offers monthly, you should too.
-            </p>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-              Proceed to update your professional career profile ASAP, using the details below.
-            </p>
-            
-            <div style="background: #e3f2fd; border: 1px solid #bbdefb; padding: 15px; border-radius: 6px; margin: 20px 0;">
-              <p style="color: #1565c0; margin: 0; font-weight: bold;">Login Details:</p>
-              <p style="color: #1565c0; margin: 5px 0 0 0;">
-                Website: <a href="https://jobprofile.com.ng/login" style="color: #1565c0;">https://jobprofile.com.ng/login</a><br>
-                Your login email: {{email}}<br>
-                Password: If you can't remember your password, click on Forgot Password to get support.
-              </p>
-            </div>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="https://jobprofile.com.ng/login" 
-                 style="background: #0044CC; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
-                Complete Your Profile
-              </a>
-            </div>
-          </div>
-          
-          <div style="text-align: center; color: #999; font-size: 12px;">
-            <p>Cheers!!!<br>Support Team.</p>
-            <p>&copy; ${new Date().getFullYear()} Career Profile Online. All rights reserved.</p>
-          </div>
-        </div>
-      `,
-      targetAudience: 'incomplete_profiles',
-      emailsPerHour: 45,
-      createdBy: req.user.id
-    };
 
-    const result = await emailCampaignService.createCampaign(campaignData);
-
-    res.status(201).json({
-      success: true,
-      message: 'Default career profile campaign created successfully',
-      data: result
-    });
-  } catch (error) {
-    console.error('Error creating default campaign:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to create default campaign',
-      error: error.message
-    });
-  }
-};
 
 module.exports = {
   createCampaign,
@@ -386,5 +312,5 @@ module.exports = {
   sendNextBatch,
   getCampaignRecipients,
   calculateCampaignStats,
-  createDefaultCareerProfileCampaign
+
 }; 

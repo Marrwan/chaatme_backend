@@ -5,6 +5,7 @@
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
+  error.statusCode = err.statusCode; // Preserve the original statusCode
 
   // Log error for debugging
   if (process.env.NODE_ENV === 'development') {

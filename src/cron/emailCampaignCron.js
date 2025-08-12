@@ -101,22 +101,13 @@ const retryFailedEmails = async () => {
       try {
         console.log(`[EMAIL_CRON] Retrying email to ${emailLog.recipientEmail}`);
         
-        // Send email based on campaign type
-        let result;
-        if (emailLog.campaign.name.toLowerCase().includes('career profile') || 
-            emailLog.campaign.subject.toLowerCase().includes('career profile')) {
-          result = await require('../services/emailService').sendCareerProfileEmail(
-            emailLog.recipientEmail,
-            emailLog.recipientName
-          );
-        } else {
-          result = await require('../services/emailService').sendCampaignEmail(
-            emailLog.recipientEmail,
-            emailLog.recipientName,
-            emailLog.campaign.subject,
-            emailLog.campaign.template
-          );
-        }
+                // Send email
+        const result = await require('../services/emailService').sendCampaignEmail(
+          emailLog.recipientEmail,
+          emailLog.recipientName,
+          emailLog.campaign.subject,
+          emailLog.campaign.template
+        );
 
         // Update email log
         await emailLog.update({

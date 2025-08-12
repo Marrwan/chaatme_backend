@@ -59,6 +59,13 @@ module.exports = (sequelize) => {
       allowNull: true,
       field: 'profile_picture'
     },
+
+    datingProfilePicture: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'dating_profile_picture',
+      comment: 'Profile picture for dating module'
+    },
     dateOfBirth: {
       type: DataTypes.DATEONLY,
       allowNull: true,
@@ -267,20 +274,7 @@ module.exports = (sequelize) => {
     User.hasMany(models.GroupMember, { foreignKey: 'addedBy', as: 'addedMembers' });
     User.hasMany(models.GroupCallParticipant, { foreignKey: 'userId', as: 'callParticipations' });
 
-    // Professional Career Profile associations
-    User.hasOne(models.ProfessionalCareerProfile, { foreignKey: 'userId', as: 'professionalCareerProfile' });
-    User.hasMany(models.WorkExperience, { foreignKey: 'userId', as: 'workExperiences' });
-    User.hasMany(models.HigherEducation, { foreignKey: 'userId', as: 'higherEducations' });
-    User.hasMany(models.BasicEducation, { foreignKey: 'userId', as: 'basicEducations' });
-    User.hasMany(models.ProfessionalMembership, { foreignKey: 'userId', as: 'professionalMemberships' });
-    User.hasMany(models.TrainingCertification, { foreignKey: 'userId', as: 'trainingCertifications' });
-    User.hasMany(models.ReferenceDetail, { foreignKey: 'userId', as: 'referenceDetails' });
 
-    // Job associations
-    User.hasOne(models.JobHuntingSettings, { foreignKey: 'userId', as: 'jobHuntingSettings' });
-    User.hasMany(models.JobSubscription, { foreignKey: 'userId', as: 'jobSubscriptions' });
-    User.hasMany(models.JobPayment, { foreignKey: 'userId', as: 'jobPayments' });
-    User.hasMany(models.JobActivityLog, { foreignKey: 'userId', as: 'jobActivityLogs' });
   };
 
   return User;

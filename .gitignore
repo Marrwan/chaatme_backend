@@ -15,6 +15,7 @@ yarn-error.log*
 # Logs
 logs
 *.log
+server.log
 
 # Runtime data
 pids
@@ -108,3 +109,16 @@ uploads/*
 # Test files
 test-results/
 playwright-report/
+test-*.js
+test-*.ts
+
+# Test directories
+tests/
+
+# Temporary test files
+test-db-connection.js
+test-comprehensive-fixes.js
+test-simple-fixes.js
+test-final-verification.js
+test-whatsapp-features.js
+test-dating-dashboard-fixes.js

@@ -63,8 +63,7 @@ router.use(authenticateToken); // All routes require authentication
 // Create campaign
 router.post('/', ...validateCampaign, emailCampaignController.createCampaign);
 
-// Create default career profile campaign
-router.post('/default-career-profile', emailCampaignController.createDefaultCareerProfileCampaign);
+
 
 // Get all campaigns
 router.get('/', ...validatePagination, emailCampaignController.getAllCampaigns);

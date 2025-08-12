@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: choice-talent-backend
-    env: node
+    name: chaatme-backend
+    runtime: node
     plan: starter
     buildCommand: npm install
-    startCommand: npm run db:setup && npm start
+    startCommand: npm run db:migrate && npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -20,10 +20,18 @@ services:
         value: 900000
       - key: RATE_LIMIT_MAX
         value: 100
-    healthCheckPath: /api/health
+      - key: FRONTEND_URL
+        value: https://chaatme-frontend.netlify.app
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_FROM
+        value: ChaatMe <no-reply@chaatme.com>
+    healthCheckPath: /health
 
 databases:
-  - name: choice-talent-db
-    databaseName: choice_talent_prod
-    user: choice_talent_user
+  - name: chaatme-db
+    databaseName: chaatme_prod
+    user: chaatme_user
     plan: starter 

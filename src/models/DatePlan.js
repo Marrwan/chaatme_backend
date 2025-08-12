@@ -47,7 +47,7 @@ module.exports = (sequelize) => {
     suggestions: {
       type: DataTypes.TEXT,
       allowNull: true,
-      comment: 'Professional suggestions from the planning team'
+      comment: 'Expert suggestions from the planning team'
     }
   }, {
     tableName: 'date_plans',

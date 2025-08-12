@@ -14,7 +14,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL || 'postgresql://localh
   define: {
     timestamps: true,
     underscored: true,
-    paranoid: true // Soft deletes
+    paranoid: false 
   }
 });
 
@@ -35,26 +35,12 @@ const Group = require('./group')(sequelize, Sequelize.DataTypes);
 const GroupMember = require('./group-member')(sequelize, Sequelize.DataTypes);
 const GroupCallParticipant = require('./GroupCallParticipant')(sequelize, Sequelize.DataTypes);
 
-// Professional Career Profile models
-const ProfessionalCareerProfile = require('./ProfessionalCareerProfile')(sequelize, Sequelize.DataTypes);
-const WorkExperience = require('./WorkExperience')(sequelize, Sequelize.DataTypes);
-const HigherEducation = require('./HigherEducation')(sequelize, Sequelize.DataTypes);
-const BasicEducation = require('./BasicEducation')(sequelize, Sequelize.DataTypes);
-const ProfessionalMembership = require('./ProfessionalMembership')(sequelize, Sequelize.DataTypes);
-const TrainingCertification = require('./TrainingCertification')(sequelize, Sequelize.DataTypes);
-const ReferenceDetail = require('./ReferenceDetail')(sequelize, Sequelize.DataTypes);
 
-// Job Hunting Settings model
-const JobHuntingSettings = require('./JobHuntingSettings')(sequelize, Sequelize.DataTypes);
-
-// Job Subscription models
-const JobSubscription = require('./JobSubscription')(sequelize, Sequelize.DataTypes);
-const JobPayment = require('./JobPayment')(sequelize, Sequelize.DataTypes);
-const JobActivityLog = require('./JobActivityLog')(sequelize, Sequelize.DataTypes);
 
 // Email Campaign models
 const EmailCampaign = require('./EmailCampaign')(sequelize, Sequelize.DataTypes);
 const EmailLog = require('./EmailLog')(sequelize, Sequelize.DataTypes);
+const TypingIndicator = require('./TypingIndicator')(sequelize, Sequelize.DataTypes);
 
 // Set up model associations using the associate methods
 const models = {
@@ -73,19 +59,9 @@ const models = {
   Group,
   GroupMember,
   GroupCallParticipant,
-  ProfessionalCareerProfile,
-  WorkExperience,
-  HigherEducation,
-  BasicEducation,
-  ProfessionalMembership,
-  TrainingCertification,
-  ReferenceDetail,
-  JobHuntingSettings,
-  JobSubscription,
-  JobPayment,
-  JobActivityLog,
   EmailCampaign,
-  EmailLog
+  EmailLog,
+  TypingIndicator
 };
 
 // Call associate methods if they exist
@@ -113,19 +89,9 @@ const db = {
   Group,
   GroupMember,
   GroupCallParticipant,
-  ProfessionalCareerProfile,
-  WorkExperience,
-  HigherEducation,
-  BasicEducation,
-  ProfessionalMembership,
-  TrainingCertification,
-  ReferenceDetail,
-  JobHuntingSettings,
-  JobSubscription,
-  JobPayment,
-  JobActivityLog,
   EmailCampaign,
-  EmailLog
+  EmailLog,
+  TypingIndicator
 };
 
 module.exports = db; 

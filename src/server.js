@@ -16,9 +16,7 @@ const chatRoutes = require('./routes/chat');
 const callRoutes = require('./routes/call');
 const groupRoutes = require('./routes/group');
 const paymentRoutes = require('./routes/payment');
-const professionalCareerProfileRoutes = require('./routes/professionalCareerProfile');
-const jobHuntingSettingsRoutes = require('./routes/jobHuntingSettings');
-const jobSubscriptionRoutes = require('./routes/jobSubscription');
+
 const emailCampaignRoutes = require('./routes/emailCampaign');
 const errorHandler = require('./middleware/errorHandler');
 const socketService = require('./services/socketService');
@@ -140,7 +138,7 @@ app.get('/api/health', (req, res) => {
 app.get('/test-image', (req, res) => {
   res.status(200).json({
     message: 'Image test endpoint',
-    sampleImage: 'http://localhost:3001/api/uploads/professional-profiles/1753805315000-aea1abb572ef.jpeg',
+    sampleImage: 'http://localhost:3001/api/uploads/profiles/1753805315000-aea1abb572ef.jpeg',
     corsHeaders: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
@@ -158,9 +156,7 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/calls', callRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api/professional-career-profile', professionalCareerProfileRoutes);
-app.use('/api/job-hunting-settings', jobHuntingSettingsRoutes);
-app.use('/api/job-subscription', jobSubscriptionRoutes);
+
 app.use('/api/email-campaigns', emailCampaignRoutes);
 
 // 404 handler
@@ -182,6 +178,7 @@ async function startServer() {
     // Test database connection if DATABASE_URL is provided
     if (process.env.DATABASE_URL) {
       await sequelize.authenticate();
+      // await sequelize.sync({alter:true});
       console.log('Database connected successfully.');
       
       // Sync database (in production, use migrations instead)

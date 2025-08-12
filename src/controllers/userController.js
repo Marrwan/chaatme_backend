@@ -219,6 +219,46 @@ const searchUsers = asyncHandler(async (req, res, next) => {
   });
 });
 
+
+
+/**
+ * Upload dating profile picture
+ */
+const uploadDatingProfilePicture = asyncHandler(async (req, res) => {
+  const { profilePicture } = req.body;
+  
+  if (!profilePicture) {
+    return res.status(400).json({
+      success: false,
+      message: 'Profile picture URL is required'
+    });
+  }
+
+  await req.user.update({ datingProfilePicture: profilePicture });
+
+  res.status(200).json({
+    success: true,
+    message: 'Dating profile picture updated successfully',
+    data: {
+      datingProfilePicture: profilePicture
+    }
+  });
+});
+
+
+
+/**
+ * Delete dating profile picture
+ */
+const deleteDatingProfilePicture = asyncHandler(async (req, res) => {
+  await req.user.update({ datingProfilePicture: null });
+
+  res.status(200).json({
+    success: true,
+    message: 'Dating profile picture deleted successfully'
+  });
+});
+
 module.exports = {
   getProfile,
   updateProfile,
@@ -226,5 +266,7 @@ module.exports = {
   deleteAccount,
   getDashboard,
   getUsers,
-  searchUsers
+  searchUsers,
+  uploadDatingProfilePicture,
+  deleteDatingProfilePicture
 }; 

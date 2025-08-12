@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Choice Talent Backend API",
-    "description": "Complete API collection for Choice Talent backend endpoints",
+    "name": "Choice Dating - Messaging & Calling API",
+    "description": "Complete API collection for testing WhatsApp-style messaging and calling features",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -16,7 +16,29 @@
       "type": "string"
     }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
   "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
     {
       "name": "Authentication",
       "item": [
@@ -32,31 +54,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\",\n  \"name\": \"John Doe\"\n}"
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Test User\",\n  \"realName\": \"Test User\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"gender\": \"male\",\n  \"country\": \"United States\",\n  \"state\": \"California\",\n  \"lga\": \"Los Angeles\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/register",
               "host": ["{{baseUrl}}"],
               "path": ["api", "auth", "register"]
             }
-          },
-          "response": []
+          }
         },
         {
           "name": "Login User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const responseJson = pm.response.json();",
-                  "    pm.collectionVariables.set('authToken', responseJson.data.token);",
-                  "}"
-                ]
-              }
-            }
-          ],
           "request": {
             "method": "POST",
             "header": [
@@ -67,7 +75,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\"\n}"
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/login",
@@ -75,110 +83,247 @@
               "path": ["api", "auth", "login"]
             }
           },
-          "response": []
-        },
-        {
-          "name": "Logout User",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', response.token);",
+                  "}"
+                ]
               }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/logout",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "logout"]
             }
-          },
-          "response": []
-        },
-        {
-          "name": "Forgot Password",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/forgot-password",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "forgot-password"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Reset Password",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"token\": \"RESET_TOKEN_HERE\",\n  \"newPassword\": \"NewPassword123!\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/reset-password",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "reset-password"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Profile (Auth)",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "profile"]
-            }
-          },
-          "response": []
+          ]
         }
       ]
     },
     {
-      "name": "User Management",
+      "name": "Messaging",
       "item": [
         {
-          "name": "Get User Profile",
+          "name": "Get Conversations",
           "request": {
             "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "conversations"]
+            }
+          }
+        },
+        {
+          "name": "Create Conversation",
+          "request": {
+            "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "key": "Content-Type",
+                "value": "application/json"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"participantId\": \"user-uuid-here\"\n}"
+            },
             "url": {
-              "raw": "{{baseUrl}}/api/user/profile",
+              "raw": "{{baseUrl}}/api/chat/conversations",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "profile"]
+              "path": ["api", "chat", "conversations"]
             }
+          }
+        },
+        {
+          "name": "Get Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/conversations/:conversationId/messages?page=1&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "conversations", ":conversationId", "messages"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Hello! This is a test message.\",\n  \"messageType\": \"text\",\n  \"tempMessageId\": \"temp_1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/conversations/:conversationId/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "conversations", ":conversationId", "messages"]
+            }
+          }
+        },
+        {
+          "name": "Mark Message as Read",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/messages/:messageId/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "messages", ":messageId", "read"]
+            }
+          }
+        },
+        {
+          "name": "Delete Message",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/chat/messages/:messageId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chat", "messages", ":messageId"]
+            }
+          }
+        }
+      ]
           },
-          "response": []
+    {
+      "name": "Calling",
+      "item": [
+        {
+          "name": "Initiate Call",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"receiverId\": \"user-uuid-here\",\n  \"callType\": \"audio\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/calls/initiate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "calls", "initiate"]
+            }
+          }
+        },
+        {
+          "name": "Answer Call",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/calls/:callId/answer",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "calls", ":callId", "answer"]
+            }
+          }
+        },
+        {
+          "name": "Reject Call",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/calls/:callId/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "calls", ":callId", "reject"]
+            }
+          }
+        },
+        {
+          "name": "End Call",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/calls/:callId/end",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "calls", ":callId", "end"]
+            }
+        }
+    },
+        {
+          "name": "Get Call History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/calls/history?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "calls", "history"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
         },
         {
           "name": "Update User Profile",
@@ -186,590 +331,53 @@
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated Name\",\n  \"email\": \"updated@example.com\"\n}"
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"realName\": \"Updated Real Name\",\n  \"interests\": \"Reading, Traveling, Music\",\n  \"hobbies\": \"Photography, Cooking\",\n  \"loveLanguage\": \"words_of_affirmation\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/user/profile",
+              "raw": "{{baseUrl}}/api/users/profile",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "profile"]
+              "path": ["api", "users", "profile"]
             }
-          },
-          "response": []
-        },
-        {
-          "name": "Change Password",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"oldPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword123!\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/user/change-password",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "change-password"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Dashboard Data",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/user/dashboard",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "dashboard"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Account",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/user/account",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "account"]
-            }
-          },
-          "response": []
+          }
         }
       ]
     },
     {
-      "name": "Professional Career Profile",
+      "name": "WebSocket Events",
+      "description": "WebSocket events for real-time messaging and calling",
       "item": [
         {
-          "name": "Get Professional Career Profile",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/professional-career-profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "professional-career-profile"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Professional Career Profile",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "profilePicture",
-                  "type": "file",
-                  "src": []
-                },
-                {
-                  "key": "fullName",
-                  "value": "John Doe",
-                  "type": "text"
-                },
-                {
-                  "key": "gender",
-                  "value": "male",
-                  "type": "text"
-                },
-                {
-                  "key": "dateOfBirth",
-                  "value": "1990-01-01",
-                  "type": "text"
-                },
-                {
-                  "key": "phoneNumber",
-                  "value": "+2348012345678",
-                  "type": "text"
-                },
-                {
-                  "key": "emailAddress",
-                  "value": "john.doe@example.com",
-                  "type": "text"
-                },
-                {
-                  "key": "address",
-                  "value": "123 Main Street, Lagos",
-                  "type": "text"
-                },
-                {
-                  "key": "lgaOfResidence",
-                  "value": "Ikeja",
-                  "type": "text"
-                },
-                {
-                  "key": "stateOfResidence",
-                  "value": "Lagos",
-                  "type": "text"
-                },
-                {
-                  "key": "professionalSummary",
-                  "value": "Experienced software developer with 5+ years in web development",
-                  "type": "text"
-                },
-                {
-                  "key": "persona",
-                  "value": "Team player with strong problem-solving skills",
-                  "type": "text"
-                },
-                {
-                  "key": "expertiseCompetencies",
-                  "value": "[\"JavaScript\", \"React\", \"Node.js\"]",
-                  "type": "text"
-                },
-                {
-                  "key": "softwareSkills",
-                  "value": "[\"VS Code\", \"Git\", \"Docker\"]",
-                  "type": "text"
-                },
-                {
-                  "key": "nyscStatus",
-                  "value": "Yes",
-                  "type": "text"
-                },
-                {
-                  "key": "workExperiences",
-                  "value": "[{\"companyName\":\"Tech Corp\",\"designation\":\"Senior Developer\",\"entryDate\":\"2020-01-01\"}]",
-                  "type": "text"
-                },
-                {
-                  "key": "higherEducations",
-                  "value": "[{\"institutionName\":\"University of Lagos\",\"courseOfStudy\":\"Computer Science\",\"qualification\":\"BSc\",\"entryYear\":2015}]",
-                  "type": "text"
-                },
-                {
-                  "key": "basicEducations",
-                  "value": "[{\"schoolName\":\"Lagos High School\",\"educationType\":\"Secondary\"}]",
-                  "type": "text"
-                },
-                {
-                  "key": "professionalMemberships",
-                  "value": "[{\"professionalBodyName\":\"Nigerian Computer Society\"}]",
-                  "type": "text"
-                },
-                {
-                  "key": "trainingCertifications",
-                  "value": "[{\"trainingOrganization\":\"Microsoft\",\"certificationName\":\"Azure Developer\"}]",
-                  "type": "text"
-                },
-                {
-                  "key": "referenceDetails",
-                  "value": "[{\"refereeName\":\"Jane Smith\",\"occupation\":\"Manager\"}]",
-                  "type": "text"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/professional-career-profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "professional-career-profile"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Professional Career Profile",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "fullName",
-                  "value": "John Doe Updated",
-                  "type": "text"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/professional-career-profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "professional-career-profile"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Professional Career Profile",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/professional-career-profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "professional-career-profile"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Job Hunting Settings",
-      "item": [
-        {
-          "name": "Get Job Hunting Settings",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/job-hunting-settings",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-hunting-settings"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Job Hunting Settings",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"jobTypes\": [\"Full-time Jobs\", \"Remote Jobs\"],\n  \"careerCategory\": \"Entry-Level\",\n  \"categoryOfPositions\": [\"Computer / Full Stack Software Development / Frontend & Backend / Web Design & Development\"],\n  \"totalYearsOfWorkExperience\": \"2 Years of work experience\",\n  \"preferredLocations\": [\"Lagos State\", \"Abuja (FCT)\"],\n  \"minimumSalaryExpectation\": \"₦500,000\",\n  \"workWithProposedPay\": false,\n  \"salaryExpectationNegotiable\": \"Yes\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-hunting-settings",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-hunting-settings"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Job Hunting Settings",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"jobTypes\": [\"Full-time Jobs\", \"Remote Jobs\", \"Part-time Jobs\"],\n  \"careerCategory\": \"Intermediate Level\",\n  \"categoryOfPositions\": [\"Computer / Full Stack Software Development / Frontend & Backend / Web Design & Development\"],\n  \"totalYearsOfWorkExperience\": \"5 Years of work experience\",\n  \"preferredLocations\": [\"Lagos State\", \"Abuja (FCT)\", \"Ogun State\"],\n  \"minimumSalaryExpectation\": \"₦800,000\",\n  \"workWithProposedPay\": false,\n  \"salaryExpectationNegotiable\": \"Yes\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-hunting-settings",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-hunting-settings"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Job Hunting Settings",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/job-hunting-settings",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-hunting-settings"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Job Subscription",
-      "item": [
-        {
-          "name": "Check Eligibility",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/eligibility",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "eligibility"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Subscription Packages",
+          "name": "Connect to WebSocket",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/packages",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "packages"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Subscription",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"subscriptionType\": \"3-5_years\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/subscriptions",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "subscriptions"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get User Subscriptions",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/subscriptions",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "subscriptions"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Payment",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"subscriptionId\": \"subscription-uuid-here\",\n  \"paymentMethod\": \"bank_transfer\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/payments",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "payments"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Upload Proof of Payment",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
+              "raw": "ws://localhost:3001/socket.io/?EIO=4&transport=websocket",
+              "protocol": "ws",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io"],
+              "query": [
                 {
-                  "key": "proofOfPayment",
-                  "type": "file",
-                  "src": []
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "websocket"
                 }
               ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/payments/payment-id-here/proof",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "payments", "payment-id-here", "proof"]
             }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Activity Logs",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/activity-logs",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "activity-logs"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Verify Payment (Admin)",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"completed\",\n  \"transactionReference\": \"TXN123456\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/payments/payment-id-here/verify",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "payments", "payment-id-here", "verify"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Activity Log (Admin)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"subscriptionId\": \"subscription-uuid-here\",\n  \"activityType\": \"profile_forwarded\",\n  \"companyName\": \"Tech Corp\",\n  \"companyLocation\": \"Lagos, Nigeria\",\n  \"position\": \"Software Developer\",\n  \"description\": \"Profile forwarded to hiring manager\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/job-subscription/activity-logs",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "job-subscription", "activity-logs"]
-            }
-          },
-          "response": []
+          }
         }
       ]
-    },
-    {
-      "name": "Health Check",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/health",
-          "host": ["{{baseUrl}}"],
-          "path": ["health"]
-        }
-      },
-      "response": []
     }
   ]
+} 
 } 

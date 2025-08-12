@@ -76,6 +76,13 @@ class SocketService {
     // Emit user online status
     this.emitUserOnlineStatus(userId, true);
     
+    // Send connection confirmation to client
+    socket.emit('connected', {
+      userId,
+      socketId: socket.id,
+      timestamp: new Date().toISOString()
+    });
+    
     // Handle chat events
     socket.on('join_conversation', (conversationId) => {
       socket.join(`conversation:${conversationId}`);
@@ -89,6 +96,18 @@ class SocketService {
     
     socket.on('send_message', (data) => {
       this.handleSendMessage(socket, data);
+    });
+    
+    socket.on('message_ack', (data) => {
+      this.handleMessageAck(socket, data);
+    });
+    
+    socket.on('message_delivered', (data) => {
+      this.handleMessageDelivered(socket, data);
+    });
+    
+    socket.on('message_read', (data) => {
+      this.handleMessageRead(socket, data);
     });
     
     socket.on('typing', (data) => {
@@ -237,7 +256,10 @@ class SocketService {
         content,
         message_type: messageType || 'text',
         sender_id: socket.userId,
-        conversation_id: conversationId
+        conversation_id: conversationId,
+        status: 'pending',
+        temp_message_id: tempMessageId,
+        sequence_id: await this.getNextSequenceId(conversationId)
       });
 
       // Load complete message with associations
@@ -251,7 +273,7 @@ class SocketService {
           {
             model: MessageAttachment,
             as: 'attachments',
-            attributes: ['id', 'original_name', 'fileType', 'size', 'fileUrl', 'thumbnail_url']
+            attributes: ['id', 'original_name', 'file_type', 'size', 'file_url', 'thumbnail_url']
           }
         ]
       });
@@ -330,6 +352,128 @@ class SocketService {
       readBy: socket.userId,
       timestamp: new Date().toISOString()
     });
+  }
+
+  /**
+   * Handle message acknowledgment from client
+   */
+  async handleMessageAck(socket, data) {
+    const { messageId, tempMessageId } = data;
+    const userId = socket.userId;
+    
+    console.log(`Message ACK received from user ${userId} for message ${messageId || tempMessageId}`);
+    
+    try {
+      const { Message } = require('../models');
+      
+      // Update message status to 'sent'
+      await Message.update(
+        { 
+          status: 'sent',
+          sentAt: new Date()
+        },
+        { 
+          where: { 
+            id: messageId,
+            senderId: userId 
+          }
+        }
+      );
+      
+      // Emit confirmation to sender
+      this.sendToUser(userId, 'message_sent', {
+        messageId,
+        tempMessageId,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error('Error handling message ACK:', error);
+    }
+  }
+
+  /**
+   * Handle message delivered confirmation
+   */
+  async handleMessageDelivered(socket, data) {
+    const { messageId } = data;
+    const userId = socket.userId;
+    
+    console.log(`Message delivered confirmation from user ${userId} for message ${messageId}`);
+    
+    try {
+      const { Message } = require('../models');
+      
+      // Update message status to 'delivered'
+      await Message.update(
+        { 
+          status: 'delivered',
+          deliveredAt: new Date()
+        },
+        { 
+          where: { 
+            id: messageId,
+            senderId: { [require('sequelize').Op.ne]: userId } // Not the sender
+          }
+        }
+      );
+      
+      // Get the message to find the sender
+      const message = await Message.findByPk(messageId);
+      if (message) {
+        // Emit delivered confirmation to sender
+        this.sendToUser(message.senderId, 'message_delivered', {
+          messageId,
+          deliveredBy: userId,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+    } catch (error) {
+      console.error('Error handling message delivered:', error);
+    }
+  }
+
+  /**
+   * Handle message read confirmation
+   */
+  async handleMessageRead(socket, data) {
+    const { messageId } = data;
+    const userId = socket.userId;
+    
+    console.log(`Message read confirmation from user ${userId} for message ${messageId}`);
+    
+    try {
+      const { Message } = require('../models');
+      
+      // Update message status to 'read'
+      await Message.update(
+        { 
+          status: 'read',
+          readAt: new Date()
+        },
+        { 
+          where: { 
+            id: messageId,
+            senderId: { [require('sequelize').Op.ne]: userId } // Not the sender
+          }
+        }
+      );
+      
+      // Get the message to find the sender
+      const message = await Message.findByPk(messageId);
+      if (message) {
+        // Emit read confirmation to sender
+        this.sendToUser(message.senderId, 'message_read', {
+          messageId,
+          readBy: userId,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+    } catch (error) {
+      console.error('Error handling message read:', error);
+    }
   }
 
   // --- Call Signaling Handlers ---
@@ -1517,6 +1661,25 @@ class SocketService {
    */
   getSocket() {
     return this.io;
+  }
+
+  /**
+   * Get next sequence ID for a conversation
+   */
+  async getNextSequenceId(conversationId) {
+    try {
+      const { Message } = require('../models');
+      const lastMessage = await Message.findOne({
+        where: { conversation_id: conversationId },
+        order: [['sequence_id', 'DESC']],
+        attributes: ['sequence_id']
+      });
+      
+      return (lastMessage?.sequence_id || 0) + 1;
+    } catch (error) {
+      console.error('Error getting next sequence ID:', error);
+      return Date.now(); // Fallback to timestamp
+    }
   }
 }
 

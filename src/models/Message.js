@@ -74,12 +74,43 @@ module.exports = (sequelize, DataTypes) => {
       },
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'sent', 'delivered', 'read'),
+      allowNull: false,
+      defaultValue: 'pending',
+      field: 'status',
+      comment: 'Message delivery status: pending -> sent -> delivered -> read'
+    },
+    sentAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: 'sent_at',
+      comment: 'When message was sent to server'
+    },
+    deliveredAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: 'delivered_at',
+      comment: 'When message was delivered to recipient device'
+    },
+    tempMessageId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'temp_message_id',
+      comment: 'Temporary ID for client-side message tracking'
+    },
+    sequenceId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: 'sequence_id',
+      comment: 'Server-assigned sequence ID for message ordering'
     }
   }, {
     tableName: 'messages',
     timestamps: true,
     underscored: true,
-    paranoid: false, // We handle soft deletes manually
+    paranoid: false, // We handle soft deletes manually with is_deleted field
     indexes: [
       {
         fields: ['conversation_id']

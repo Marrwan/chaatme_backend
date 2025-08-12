@@ -1,21 +1,23 @@
 {
-  "name": "choice-talent-backend",
+  "name": "chaatme-backend",
   "version": "1.0.0",
-  "description": "Backend API for Choice Talent application",
+  "description": "Backend API for ChaatMe application",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "build": "npm install",
     "test": "jest",
     "test:watch": "jest --watch",
     "db:migrate": "sequelize-cli db:migrate",
     "db:seed": "sequelize-cli db:seed:all",
     "db:setup": "node setup-db.js",
-    "db:reset": "psql -U postgres -c 'DROP DATABASE IF EXISTS choice_talent_dev;' && psql -U postgres -c 'CREATE DATABASE choice_talent_dev;' && sequelize-cli db:migrate"
+    "db:reset": "node reset_db.js"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-toast": "^1.2.14",
+    "axios": "^1.11.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",
     "compression": "^1.7.4",
@@ -26,6 +28,7 @@
     "express-async-handler": "^1.2.0",
     "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.1",
+    "form-data": "^4.0.4",
     "helmet": "^7.1.0",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
@@ -57,6 +60,6 @@
     "sequelize",
     "postgresql"
   ],
-  "author": "Choice Talent Team",
+  "author": "ChaatMe Team",
   "license": "MIT"
 }

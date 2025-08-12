@@ -130,13 +130,11 @@ const processFileUpload = async (file, userId) => {
     const fileUrl = generateFileUrl(file.filename);
     
     const attachment = {
-      fileName: file.filename,
-      originalName: file.originalname,
-      fileSize: file.size,
-      mimeType: file.mimetype,
-      filePath: file.path,
-      fileUrl: fileUrl,
-      uploadedBy: userId
+      original_name: file.originalname,
+      file_type: file.mimetype,
+      size: file.size,
+      file_url: fileUrl,
+      uploaded_by: userId
     };
 
     // Create thumbnail for images
@@ -146,8 +144,7 @@ const processFileUpload = async (file, userId) => {
       
       const thumbnailCreated = await createThumbnail(file.path, thumbnailPath);
       if (thumbnailCreated) {
-        attachment.thumbnailPath = thumbnailPath;
-        attachment.thumbnailUrl = generateThumbnailUrl(thumbnailFilename);
+        attachment.thumbnail_url = generateThumbnailUrl(thumbnailFilename);
       }
     }
 

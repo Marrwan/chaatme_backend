@@ -30,52 +30,61 @@ module.exports = (sequelize) => {
     targetAudience: {
       type: DataTypes.ENUM('incomplete_profiles', 'all_users', 'custom_list'),
       allowNull: false,
-      defaultValue: 'incomplete_profiles'
+      defaultValue: 'incomplete_profiles',
+      field: 'target_audience'
     },
     customEmailList: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
       defaultValue: [],
-      comment: 'Custom list of email addresses'
+      comment: 'Custom list of email addresses',
+      field: 'custom_email_list'
     },
     emailsPerHour: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 45,
-      comment: 'Maximum emails to send per hour'
+      comment: 'Maximum emails to send per hour',
+      field: 'emails_per_hour'
     },
     totalEmails: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
-      comment: 'Total number of emails in campaign'
+      comment: 'Total number of emails in campaign',
+      field: 'total_emails'
     },
     sentEmails: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
-      comment: 'Number of emails sent so far'
+      comment: 'Number of emails sent so far',
+      field: 'sent_emails'
     },
     failedEmails: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
-      comment: 'Number of emails that failed to send'
+      comment: 'Number of emails that failed to send',
+      field: 'failed_emails'
     },
     scheduledAt: {
       type: DataTypes.DATE,
       allowNull: true,
-      comment: 'When to start the campaign'
+      comment: 'When to start the campaign',
+      field: 'scheduled_at'
     },
     startedAt: {
       type: DataTypes.DATE,
       allowNull: true,
-      comment: 'When the campaign actually started'
+      comment: 'When the campaign actually started',
+      field: 'started_at'
     },
     completedAt: {
       type: DataTypes.DATE,
       allowNull: true,
-      comment: 'When the campaign completed'
+      comment: 'When the campaign completed',
+      field: 'completed_at'
     },
     createdBy: {
       type: DataTypes.UUID,

@@ -1,4 +1,4 @@
-const { EmailCampaign, EmailLog, User, ProfessionalCareerProfile } = require('../models');
+const { EmailCampaign, EmailLog, User } = require('../models');
 const emailService = require('./emailService');
 const { Op } = require('sequelize');
 
@@ -33,21 +33,8 @@ const calculateTotalEmails = async (targetAudience, customEmailList = []) => {
   try {
     switch (targetAudience) {
       case 'incomplete_profiles':
-        // Find users without complete professional career profiles
-        const incompleteUsers = await User.findAll({
-          include: [{
-            model: ProfessionalCareerProfile,
-            as: 'professionalCareerProfile',
-            required: false
-          }],
-          where: {
-            [Op.or]: [
-              { '$professionalCareerProfile.id$': null },
-              { '$professionalCareerProfile.full_name$': null }
-            ]
-          }
-        });
-        return incompleteUsers.length;
+        // This case is no longer supported after removing career functionality
+        return 0;
         
       case 'all_users':
         const allUsers = await User.count();
@@ -79,26 +66,8 @@ const getCampaignRecipients = async (campaignId) => {
 
     switch (campaign.targetAudience) {
       case 'incomplete_profiles':
-        // Get users without complete professional career profiles
-        const incompleteUsers = await User.findAll({
-          include: [{
-            model: ProfessionalCareerProfile,
-            as: 'professionalCareerProfile',
-            required: false
-          }],
-          where: {
-            [Op.or]: [
-              { '$professionalCareerProfile.id$': null },
-              { '$professionalCareerProfile.full_name$': null }
-            ]
-          },
-          attributes: ['id', 'email', 'name', 'realName']
-        });
-        
-        recipients = incompleteUsers.map(user => ({
-          email: user.email,
-          name: user.realName || user.name || user.email
-        }));
+        // This case is no longer supported after removing career functionality
+        recipients = [];
         break;
         
       case 'all_users':
@@ -192,22 +161,13 @@ const sendCampaignEmails = async (campaignId) => {
 
     for (const emailLog of pendingEmails) {
       try {
-        // Send email based on campaign type
-        let result;
-        if (campaign.name.toLowerCase().includes('career profile') || 
-            campaign.subject.toLowerCase().includes('career profile')) {
-          result = await emailService.sendCareerProfileEmail(
-            emailLog.recipientEmail,
-            emailLog.recipientName
-          );
-        } else {
-          result = await emailService.sendCampaignEmail(
-            emailLog.recipientEmail,
-            emailLog.recipientName,
-            campaign.subject,
-            campaign.template
-          );
-        }
+        // Send email
+        const result = await emailService.sendCampaignEmail(
+          emailLog.recipientEmail,
+          emailLog.recipientName,
+          campaign.subject,
+          campaign.template
+        );
 
         // Update email log
         await emailLog.update({

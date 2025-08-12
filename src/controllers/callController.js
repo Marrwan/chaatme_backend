@@ -9,15 +9,16 @@ const socketService = require('../services/socketService');
  */
 const initiateCall = async (req, res, next) => {
   try {
-    const { targetUserId, callType = 'audio', conversationId } = req.body;
+    const { targetUserId, receiverId, callType = 'audio', conversationId } = req.body;
+    const actualTargetUserId = targetUserId || receiverId;
     const userId = req.user.id;
 
-    if (userId === targetUserId) {
+    if (userId === actualTargetUserId) {
       return next(createError(400, 'Cannot call yourself'));
     }
 
     // Check if target user exists
-    const targetUser = await User.findByPk(targetUserId, {
+    const targetUser = await User.findByPk(actualTargetUserId, {
       attributes: ['id', 'username', 'realName', 'profilePicture']
     });
 
@@ -29,8 +30,8 @@ const initiateCall = async (req, res, next) => {
     const existingCall = await Call.findOne({
       where: {
         [Op.or]: [
-          { callerId: userId, receiverId: targetUserId, status: { [Op.in]: ['pending', 'active'] } },
-          { callerId: targetUserId, receiverId: userId, status: { [Op.in]: ['pending', 'active'] } }
+          { callerId: userId, receiverId: actualTargetUserId, status: { [Op.in]: ['pending', 'active'] } },
+          { callerId: actualTargetUserId, receiverId: userId, status: { [Op.in]: ['pending', 'active'] } }
         ]
       }
     });
@@ -42,7 +43,7 @@ const initiateCall = async (req, res, next) => {
     // Create call record
     const call = await Call.create({
       callerId: userId,
-      receiverId: targetUserId,
+      receiverId: actualTargetUserId,
       callType,
       conversationId,
       status: 'pending'
@@ -57,7 +58,7 @@ const initiateCall = async (req, res, next) => {
     };
 
     // Send call invitation to target user via Socket.io
-    const notificationSent = socketService.sendToUser(targetUserId, 'incoming_call', {
+    const notificationSent = socketService.sendToUser(actualTargetUserId, 'incoming_call', {
       callId: call.id,
       fromUserId: userId,
       callType,

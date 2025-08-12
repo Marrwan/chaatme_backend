@@ -28,36 +28,48 @@ const getConversations = async (req, res, next) => {
           model: User,
           as: 'participant2',
           attributes: ['id', 'name', 'realName', 'username', 'profilePicture']
-        },
-        {
-          model: Message,
-          as: 'lastMessage',
-          include: [
-            {
-              model: User,
-              as: 'sender',
-              attributes: ['id', 'name', 'realName', 'username']
-            },
-            {
-              model: MessageAttachment,
-              as: 'attachments',
-              attributes: ['id', 'original_name', 'fileType', 'fileUrl', 'thumbnail_url', 'size']
-            }
-          ]
         }
       ],
       order: [['lastMessageAt', 'DESC']]
     });
 
+    // Manually fetch last messages for each conversation
+    const conversationsWithLastMessages = await Promise.all(
+      conversations.map(async (conversation) => {
+        let lastMessage = null;
+        if (conversation.lastMessageId) {
+          lastMessage = await Message.findOne({
+            where: {
+              id: conversation.lastMessageId,
+              isDeleted: false
+            },
+            include: [
+              {
+                model: User,
+                as: 'sender',
+                attributes: ['id', 'name', 'realName', 'username']
+              },
+              {
+                model: MessageAttachment,
+                as: 'attachments',
+                attributes: ['id', 'original_name', 'fileType', 'fileUrl', 'thumbnail_url', 'size']
+              }
+            ]
+          });
+        }
+        return { ...conversation.toJSON(), lastMessage };
+      })
+    );
+
     // Format conversations with other participant info
-    const formattedConversations = conversations.map(conv => {
+    const formattedConversations = conversationsWithLastMessages.map(conv => {
       const otherParticipant = conv.participant1Id === userId ? conv.participant2 : conv.participant1;
       const isOnline = socketService.isUserOnline(otherParticipant.id);
       
       return {
         id: conv.id,
         otherParticipant: {
-          ...otherParticipant.toJSON(),
+          ...otherParticipant,
           isOnline
         },
         lastMessage: conv.lastMessage,
@@ -417,7 +429,7 @@ const sendMessage = async (req, res, next) => {
         {
           model: MessageAttachment,
           as: 'attachments',
-          attributes: ['id', 'original_name', 'fileType', 'size', 'fileUrl', 'thumbnail_url']
+          attributes: ['id', 'original_name', 'file_type', 'size', 'file_url', 'thumbnail_url']
         },
         {
           model: Message,
