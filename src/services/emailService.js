@@ -37,13 +37,13 @@ const sendActivationEmail = async (email, name, activationToken) => {
     const activationUrl = `${config.app.frontendUrl}/activate-account?token=${activationToken}`;
     
     const mailOptions = {
-      from: `"Choice Talent Support" <${config.email.from}>`,
+      from: `"ChaatMe Support" <${config.email.from}>`,
       to: email,
-      subject: 'Activate Your Choice Talent Account',
+      subject: 'Activate Your ChaatMe Account',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Choice Talent</h1>
+            <h1 style="color: #9333EA; margin: 0;">ChaatMe</h1>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -54,7 +54,7 @@ const sendActivationEmail = async (email, name, activationToken) => {
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${activationUrl}" 
-                 style="background: #0044CC; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                 style="background: #9333EA; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
                 Activate Account
               </a>
             </div>
@@ -66,7 +66,7 @@ const sendActivationEmail = async (email, name, activationToken) => {
           
           <div style="text-align: center; color: #999; font-size: 12px;">
             <p>Regards,<br>Support Team</p>
-            <p>&copy; ${new Date().getFullYear()} Choice Talent. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} ChaatMe. All rights reserved.</p>
           </div>
         </div>
       `
@@ -91,13 +91,13 @@ const sendPasswordResetEmail = async (email, name, resetToken) => {
     const resetUrl = `${config.app.frontendUrl}/reset-password?token=${resetToken}`;
     
     const mailOptions = {
-      from: `"Choice Talent Support" <${config.email.from}>`,
+      from: `"ChaatMe Support" <${config.email.from}>`,
       to: email,
-      subject: 'Reset Your Password - Choice Talent',
+      subject: 'Reset Your Password - ChaatMe',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Choice Talent</h1>
+            <h1 style="color: #9333EA; margin: 0;">ChaatMe</h1>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -109,7 +109,7 @@ const sendPasswordResetEmail = async (email, name, resetToken) => {
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${resetUrl}" 
-                 style="background: #0044CC; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                 style="background: #9333EA; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
                 Reset Password
               </a>
             </div>
@@ -121,7 +121,7 @@ const sendPasswordResetEmail = async (email, name, resetToken) => {
           
           <div style="text-align: center; color: #999; font-size: 12px;">
             <p>Regards,<br>Support Team</p>
-            <p>&copy; ${new Date().getFullYear()} Choice Talent. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} ChaatMe. All rights reserved.</p>
           </div>
         </div>
       `
@@ -146,13 +146,13 @@ const sendPasswordChangeNotification = async (email, name) => {
     const resetUrl = `${config.app.frontendUrl}/forgot-password`;
     
     const mailOptions = {
-      from: `"Choice Talent Support" <${config.email.from}>`,
+      from: `"ChaatMe Support" <${config.email.from}>`,
       to: email,
-      subject: 'Password Changed - Choice Talent',
+      subject: 'Password Changed - ChaatMe',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Choice Talent</h1>
+            <h1 style="color: #9333EA; margin: 0;">ChaatMe</h1>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -177,7 +177,7 @@ const sendPasswordChangeNotification = async (email, name) => {
           
           <div style="text-align: center; color: #999; font-size: 12px;">
             <p>Regards,<br>Support Team</p>
-            <p>&copy; ${new Date().getFullYear()} Choice Talent. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} ChaatMe. All rights reserved.</p>
           </div>
         </div>
       `
@@ -202,37 +202,37 @@ const sendWelcomeEmail = async (email, name) => {
     const dashboardUrl = `${config.app.frontendUrl}/dashboard`;
     
     const mailOptions = {
-      from: `"Choice Talent Team" <${config.email.from}>`,
+      from: `"ChaatMe Team" <${config.email.from}>`,
       to: email,
-      subject: 'Welcome to Choice Talent!',
+      subject: 'Welcome to ChaatMe!',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Choice Talent</h1>
+            <h1 style="color: #9333EA; margin: 0;">ChaatMe</h1>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h2 style="color: #333; margin-top: 0;">Welcome to Choice Talent!</h2>
+            <h2 style="color: #333; margin-top: 0;">Welcome to ChaatMe!</h2>
             <p style="color: #666; line-height: 1.6;">Hello ${name || 'there'},</p>
             <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-              Your account has been successfully activated! We're excited to have you join the Choice Talent community.
+              Your account has been successfully activated! We're excited to have you join the ChaatMe community.
             </p>
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${dashboardUrl}" 
-                 style="background: #0044CC; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                 style="background: #9333EA; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
                 Go to Dashboard
               </a>
             </div>
             
             <p style="color: #666; line-height: 1.6;">
-              Start exploring our features and discover top talent for your organization.
+              Start exploring our features and discover meaningful connections.
             </p>
           </div>
           
           <div style="text-align: center; color: #999; font-size: 12px;">
-            <p>Best regards,<br>The Choice Talent Team</p>
-            <p>&copy; ${new Date().getFullYear()} Choice Talent. All rights reserved.</p>
+            <p>Best regards,<br>The ChaatMe Team</p>
+            <p>&copy; ${new Date().getFullYear()} ChaatMe. All rights reserved.</p>
           </div>
         </div>
       `
@@ -257,13 +257,13 @@ const sendUpgradeReminder = async (email, name, reminderCount = 1) => {
     const upgradeUrl = `${config.app.frontendUrl}/dashboard/subscription`;
     
     const mailOptions = {
-      from: `"Choice Talent Team" <${config.email.from}>`,
+      from: `"ChaatMe Team" <${config.email.from}>`,
       to: email,
       subject: 'Upgrade to Premium - Unlock Your Full Potential!',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Choice Talent</h1>
+            <h1 style="color: #9333EA; margin: 0;">ChaatMe</h1>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -289,7 +289,7 @@ const sendUpgradeReminder = async (email, name, reminderCount = 1) => {
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${upgradeUrl}" 
-                 style="background: #0044CC; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                 style="background: #9333EA; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
                 Upgrade to Premium Now
               </a>
             </div>
@@ -300,8 +300,8 @@ const sendUpgradeReminder = async (email, name, reminderCount = 1) => {
           </div>
           
           <div style="text-align: center; color: #999; font-size: 12px;">
-            <p>Best regards,<br>The Choice Talent Team</p>
-            <p>&copy; ${new Date().getFullYear()} Choice Talent. All rights reserved.</p>
+            <p>Best regards,<br>The ChaatMe Team</p>
+            <p>&copy; ${new Date().getFullYear()} ChaatMe. All rights reserved.</p>
           </div>
         </div>
       `
@@ -326,13 +326,13 @@ const sendSubscriptionActivation = async (email, name, planName, expiresAt) => {
     const dashboardUrl = `${config.app.frontendUrl}/dashboard`;
     
     const mailOptions = {
-      from: `"Choice Talent Team" <${config.email.from}>`,
+      from: `"ChaatMe Team" <${config.email.from}>`,
       to: email,
       subject: 'Premium Subscription Activated - Welcome to Premium!',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #0044CC; margin: 0;">Choice Talent</h1>
+            <h1 style="color: #9333EA; margin: 0;">ChaatMe</h1>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -366,15 +366,15 @@ const sendSubscriptionActivation = async (email, name, planName, expiresAt) => {
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${dashboardUrl}" 
-                 style="background: #0044CC; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                 style="background: #9333EA; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
                 Start Finding Matches
               </a>
             </div>
           </div>
           
           <div style="text-align: center; color: #999; font-size: 12px;">
-            <p>Best regards,<br>The Choice Talent Team</p>
-            <p>&copy; ${new Date().getFullYear()} Choice Talent. All rights reserved.</p>
+            <p>Best regards,<br>The ChaatMe Team</p>
+            <p>&copy; ${new Date().getFullYear()} ChaatMe. All rights reserved.</p>
           </div>
         </div>
       `
@@ -404,7 +404,7 @@ const sendCampaignEmail = async (email, name, subject, template) => {
     processedTemplate = processedTemplate.replace(/\{\{name\}\}/g, name || email);
     
     const mailOptions = {
-      from: `"Choice Talent Dating" <noreply@choicetalents.com.ng>`,
+      from: `"ChaatMe" <noreply@chaatme.com>`,
       to: email,
       subject: subject,
       html: processedTemplate

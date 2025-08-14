@@ -44,7 +44,7 @@ const corsOptions = {
       'http://localhost:3001',
       'http://localhost:3002',
       'http://localhost:3003',
-      'https://choicetalent.netlify.app',
+      'https://chaatme.com',
       'https://*.netlify.app',
       process.env.FRONTEND_URL || 'http://192.168.1.101:3000',
       'http://192.168.1.101:3000'

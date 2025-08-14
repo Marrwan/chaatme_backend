@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 // Database configuration
-const sequelize = new Sequelize(process.env.DATABASE_URL || 'postgresql://localhost:5432/choice_talent', {
+const sequelize = new Sequelize(process.env.DATABASE_URL || 'postgresql://localhost:5432/chaatme', {
   dialect: 'postgres',
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
   pool: {

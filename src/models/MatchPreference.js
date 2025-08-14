@@ -45,10 +45,6 @@ module.exports = (sequelize) => {
       allowNull: true,
       field: 'marital_status'
     },
-    height: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
     complexion: {
       type: DataTypes.STRING,
       allowNull: true
@@ -58,21 +54,17 @@ module.exports = (sequelize) => {
       allowNull: true,
       field: 'body_size'
     },
-    occupation: {
-      type: DataTypes.STRING,
-      allowNull: true
+    sameInterests: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+      field: 'same_interests'
     },
-    country: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    state: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    lga: {
-      type: DataTypes.STRING,
-      allowNull: true
+    sameHobbies: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+      field: 'same_hobbies'
     }
   }, {
     tableName: 'match_preferences',

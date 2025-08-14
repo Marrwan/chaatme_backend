@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    url: process.env.DATABASE_URL || 'postgresql://localhost:5432/choice_talent_dating_dev',
+    url: process.env.DATABASE_URL || 'postgresql://localhost:5432/chaatme_dev',
     dialect: 'postgres',
     logging: console.log,
     pool: {
@@ -13,7 +13,7 @@ module.exports = {
     }
   },
   test: {
-    url: process.env.TEST_DATABASE_URL || 'postgresql://localhost:5432/choice_talent_dating_dev_test',
+    url: process.env.TEST_DATABASE_URL || 'postgresql://localhost:5432/chaatme_test',
     dialect: 'postgres',
     logging: false,
     pool: {

@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const config = {
   app: {
-    name: 'Choice Talent',
+    name: 'ChaatMe',
     port: process.env.PORT || 3001,
     environment: process.env.NODE_ENV || 'development',
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -12,9 +12,9 @@ const config = {
     dialect: 'postgres',
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 5432,
-    database: process.env.DB_NAME || 'choice_talent_dev',
-    username: process.env.DB_USER || 'choice_talent_user',
-    password: process.env.DB_PASSWORD || 'choice_talent_password',
+    database: process.env.DB_NAME || 'chaatme_dev',
+    username: process.env.DB_USER || 'chaatme_user',
+    password: process.env.DB_PASSWORD || 'chaatme_password',
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
     pool: {
       max: 10,
@@ -37,7 +37,7 @@ const config = {
     secure: process.env.EMAIL_SECURE === 'true' || true,
     user: process.env.EMAIL_USER || '',
     password: process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD || '',
-    from: process.env.EMAIL_FROM || 'no-reply@choicetalent.com'
+    from: process.env.EMAIL_FROM || 'no-reply@chaatme.com'
   },
   
   security: {
@@ -45,10 +45,11 @@ const config = {
     rateLimitWindow: 15 * 60 * 1000, // 15 minutes
     rateLimitMax: 100, // limit each IP to 100 requests per windowMs
     corsOptions: {
-      origin: [
+      origin: [ 
         process.env.FRONTEND_URL || 'http://localhost:3000',
-        'https://choicetalent.netlify.app',
-        'https://*.netlify.app'
+        'https://chaatme.com',
+        'https://*.netlify.app',
+        'https://*.com'
       ],
       credentials: true
     }
