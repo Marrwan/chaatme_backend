@@ -24,7 +24,6 @@ const updateProfile = asyncHandler(async (req, res, next) => {
     interests,
     hobbies,
     loveLanguage,
-    profilePicture,
     dateOfBirth,
     gender,
     maritalStatus,
@@ -40,7 +39,6 @@ const updateProfile = asyncHandler(async (req, res, next) => {
   } = req.body;
   const userId = req.user.id;
 
-  // Check if email is being changed and if it's already taken
   if (email && email.toLowerCase() !== req.user.email) {
     const existingUser = await User.findOne({
       where: {
@@ -73,7 +71,6 @@ const updateProfile = asyncHandler(async (req, res, next) => {
   if (interests !== undefined) updateData.interests = interests;
   if (hobbies !== undefined) updateData.hobbies = hobbies;
   if (loveLanguage !== undefined) updateData.loveLanguage = loveLanguage;
-  if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
   if (dateOfBirth !== undefined) updateData.dateOfBirth = dateOfBirth;
   if (gender !== undefined) updateData.gender = gender;
   if (maritalStatus !== undefined) updateData.maritalStatus = maritalStatus;
@@ -225,22 +222,40 @@ const searchUsers = asyncHandler(async (req, res, next) => {
  * Upload dating profile picture
  */
 const uploadDatingProfilePicture = asyncHandler(async (req, res) => {
-  const { profilePicture } = req.body;
-  
-  if (!profilePicture) {
+  if (!req.file) {
     return res.status(400).json({
       success: false,
-      message: 'Profile picture URL is required'
+      message: 'Profile picture file is required'
     });
   }
 
-  await req.user.update({ datingProfilePicture: profilePicture });
+  // Generate the file URL
+  const fileUrl = `/api/user/profile-pictures/${req.file.filename}`;
+  
+  // Construct full URL for the response
+  // Use the API base URL that matches the frontend configuration
+  const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3001';
+  const fullFileUrl = `${apiBaseUrl}${fileUrl}`;
+  
+  console.log('API Base URL:', apiBaseUrl);
+  console.log('File URL:', fileUrl);
+  console.log('Full File URL:', fullFileUrl);
+  
+  // Update user's profile picture with the full URL
+  await req.user.update({ profilePicture: fullFileUrl });
+
+  // Fetch updated user
+  const updatedUser = await User.findByPk(req.user.id);
+
+  // The user object already has the full URL since we updated it in the database
+  const userResponse = updatedUser.toJSON();
 
   res.status(200).json({
     success: true,
-    message: 'Dating profile picture updated successfully',
+    message: 'Profile picture uploaded successfully',
     data: {
-      datingProfilePicture: profilePicture
+      user: userResponse,
+      profilePicture: fullFileUrl
     }
   });
 });
@@ -251,11 +266,17 @@ const uploadDatingProfilePicture = asyncHandler(async (req, res) => {
  * Delete dating profile picture
  */
 const deleteDatingProfilePicture = asyncHandler(async (req, res) => {
-  await req.user.update({ datingProfilePicture: null });
+  await req.user.update({ profilePicture: null });
+
+  // Fetch updated user
+  const updatedUser = await User.findByPk(req.user.id);
 
   res.status(200).json({
     success: true,
-    message: 'Dating profile picture deleted successfully'
+    message: 'Profile picture deleted successfully',
+    data: {
+      user: updatedUser
+    }
   });
 });
 

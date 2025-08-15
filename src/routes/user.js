@@ -150,4 +150,25 @@ router.delete('/dating-profile-picture',
   userController.deleteDatingProfilePicture
 );
 
+/**
+ * @route   GET /api/user/profile-pictures/:filename
+ * @desc    Serve uploaded profile pictures
+ * @access  Public
+ */
+router.get('/profile-pictures/:filename', (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(__dirname, '../uploads/profile-pictures', filename);
+  
+  // Check if file exists
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({
+      success: false,
+      message: 'Profile picture not found'
+    });
+  }
+  
+  // Serve the file
+  res.sendFile(filePath);
+});
+
 module.exports = router; 

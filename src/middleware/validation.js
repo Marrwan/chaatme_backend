@@ -88,7 +88,6 @@ const schemas = {
     interests: Joi.string().optional().allow(''),
     hobbies: Joi.string().optional().allow(''),
     loveLanguage: Joi.string().optional().allow(''),
-    profilePicture: Joi.string().uri().optional().allow(''),
     dateOfBirth: Joi.date().iso().optional().allow(''),
     gender: Joi.string().valid('male', 'female', 'other', '').optional(),
     maritalStatus: Joi.string().optional().allow(''),
